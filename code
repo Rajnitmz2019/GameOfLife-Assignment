@@ -1,0 +1,274 @@
+
+import java.util.Scanner;
+public class Rajneesh_GameOfLife {
+
+	Scanner sc=new Scanner(System.in);  
+	int [][] Table;
+        int rows,columns;
+	int m=1;
+        
+       
+        //matrix data to fill
+        public void InputData(int [][] Table,int r,int c)
+	{
+		this.rows=r;
+		this.columns=c;
+		this.Table=new int[rows][columns];
+		for(int i=0;i<r;i++)
+			for(int j=0;j<c;j++)
+			this.Table[i][j]=Table[i][j];	
+	}
+        
+        //matrix data to show
+        
+        public void OutputData()
+	{
+		for(int i=0;i<rows;i++)
+		{	
+			for(int j=0;j<columns;j++)
+			System.out.print(Table[i][j]);
+		
+		    System.out.println();
+		}
+		System.out.println();
+	}
+        
+          public void  DataMatrix() // itrartion one by one
+	   {
+		       for (int i = 0; i < rows; i++)
+		      {
+	                   for (int j = 0; j < columns; j++)
+	                 {
+	                    int Cell = Table[i][j];
+	                   calculate(i,j,Cell);
+	                    
+	                }
+	          }
+
+	           
+	   }
+          
+           
+		 public void calculate(int i,int j,int Cell) 
+		 {
+                int count=0;
+			  
+			    
+	            int Vertical_and_previous = i - 1;
+	            int Vertical_and_next = i + 1;
+	            int Horizontal_and_previous = j - 1;
+	            int Horizontal_and_next = j + 1;
+	            
+                   
+	               if (Vertical_and_previous >= 0 && Table[Vertical_and_previous][j]==1)  //upper side vertical cell
+	                 count++; 
+	               
+	              
+	               if(Vertical_and_next<rows && Table[Vertical_and_next][j]==1)   //Lower side vertical cell
+	            	count++;
+	            	
+	            
+	            
+	              
+	               if(Horizontal_and_previous >=0 && Table[i][Horizontal_and_previous]==1)  //left side horizontal cell
+	               count++;
+	            	
+	            
+	               
+	               if(Horizontal_and_next <columns && Table[i][Horizontal_and_next]==1) //right side horizontal cell
+	            	count++;
+	            	
+	            
+	            
+	            
+	            if(j>=0 && j<columns-1 && i>=0 && i<rows-1)  // side diagonal cell lower right
+	            {	
+	               if(Table[Vertical_and_next][Vertical_and_next]==1)
+	            	   count++;
+	                   
+	            }
+	            
+	            //diagonal matrix upper left 
+	            if(i>0 && i<rows && j>0 && j<columns)
+	            {
+	            	if(Table[Vertical_and_previous][Vertical_and_previous]==1)
+	            		count++;
+	            	    
+	            }
+	            
+	            //lower left side diagonal cell
+	            if(j>0 && j<columns && i>=0 && i<rows-1)
+	            {
+	            	if(Table[Vertical_and_next][Vertical_and_next]==1)
+	            		count++;
+	            	 
+	            }
+	            
+	            //upper right side diagonal cell
+	            if(i>0 && i<rows && j>=0 && j<columns-1)
+	            {
+	            	if(Table[Vertical_and_previous][Vertical_and_previous]==1)
+	            	  count++;
+	            	  
+	            }
+	            
+	            
+	            //if cell is live
+	            if(Cell==1)
+	            {
+	            	
+	            //live cell with fewer than two live neighbours dies by loneliness	
+	            if(count<2)
+	            	Table[i][j]=0; //"0" for dead, "1" for live
+	            
+	            // live cell with more than three live neighbors dies, as if by overcrowding.
+	            if(count>3)
+	            	Table[i][j]=0; //"0" for dead, "1" for live
+	            
+	            // Any live cell with two or three live neighbors lives, unchanged, to the next generation.
+	            if(count==2|| count==3)
+	            {
+	            	Table[i][j]=Table[i][j];
+	            }
+	            }
+	            
+	            //if cell is dead
+	            if(Cell==0)
+	            {
+	            	//. Any dead cell with exactly three live neighbors comes to life
+	            	if(count==3)
+	            	Table[i][j]=1; //"0" for dead, "1" for live
+	            }
+	            
+
+	       }
+                 
+                  public void StatusOfCell()//print the status of the cell i.e live or dead
+		{
+		    int count_cell = 0;
+			System.out.println("Enter The Cell position Which You Want To Check ");
+			
+			System.out.println("enter row position");
+			int row_pos=sc.nextInt();
+			
+			System.out.println("Enter Column position");
+			int col_pos=sc.nextInt();
+			
+			if(row_pos<rows && col_pos<columns)
+			{	
+			for(int i=0;i<rows;i++)
+			{
+				for(int j=0;j<columns;j++)
+					if(Table[row_pos][col_pos]==0)
+						count_cell=0;
+					else
+						count_cell=1;
+			}	
+			
+			
+				if(count_cell==0)
+					System.out.println("cell status is Dead");
+				if(count_cell==1)
+					System.out.println("cell status is Live");
+				    
+			}
+			
+			
+			else
+			{
+				System.out.println("!!!! Enter Correct Rows And Column!!!");
+				StatusOfCell();
+			}
+			
+		}
+                  
+                  
+                   public void OutState()
+	 {
+		  
+		     if(m<rows)
+		     System.out.println("State: "+m++); //print number of state
+		     System.out.println();
+			 for(int i=0;i<rows;i++)
+			 {	 
+				
+				 for(int j=0;j<columns;j++)
+					 System.out.print(Table[i][j]);//print total state
+				 
+				 System.out.println();
+			 }
+			 System.out.println();
+		 }
+                   
+                   
+                   
+                   
+                     public void OutStates() 
+	  {
+		  int n;
+		 
+		 do {
+			 
+			        System.out.println("Game of LIfe");
+				System.out.println(" 1. TO Get the Next State please press 1 \n 2. TO Check Cellplease press 1 \n 3. To EXIT please press 1 ");
+				System.out.print("Enter choice:\n");
+				int ch=sc.nextInt();
+				
+				switch(ch)
+				{
+				case 1:DataMatrix();
+				       OutState();
+				break;
+				case 2:DataMatrix();
+				       StatusOfCell();
+				       
+				break;
+				case 3:System.out.println("THANK YOU");
+                                        System.exit(2);
+				
+				break;
+				
+				default:
+					System.out.println("Wrong Choice...\n!!");
+
+				}
+				
+				System.out.print("if you want to continue then please enter 1 or to finish please enter 0\n");
+				 n=sc.nextInt();
+		    }
+                 while(n!=0);
+		
+	  }
+	
+	    
+
+	
+	public static void main(String[] args) 
+        {
+		
+		
+		 Scanner sc=new Scanner(System.in);
+		 
+		 System.out.println("Please enter The Number Of Rows you want");
+		 int r=sc.nextInt();
+		 
+		 System.out.println("Please enter The Number Of Column you want");
+		 int c=sc.nextInt();
+		 
+		 int [][] grid=new int[r][c];
+		 
+		 System.out.println( "Enter 1 for live cell .. Enter 0 for Dead cell\n" );
+		 
+		 for(int i=0;i<r;i++)	 
+			 for(int j=0;j<c;j++)
+				 grid[i][j]=sc.nextInt();
+		 
+		 Rajneesh_GameOfLife ga=new Rajneesh_GameOfLife();
+		 ga.InputData(grid, r, c);
+		 ga.OutputData();
+		 ga.OutStates();
+		 
+    
+}
+   
+}
